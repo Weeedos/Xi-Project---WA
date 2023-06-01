@@ -18,7 +18,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/index.php" ? "active" : "" ?>"
               href="/home">Home</a>
           </li>
@@ -26,7 +26,7 @@
             <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/products.php" ? "active" : "" ?>"
               href="/products">Products</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/cart.php" ? "active" : "" ?>"
               href="/cart">Cart</a>
           </li>
@@ -84,3 +84,27 @@
 </body>
 
 </html>
+
+<?php
+class Cart
+{
+  private $products;
+
+  function __construct()
+  {
+    $this->products = array();
+  }
+
+  public function addProduct(string $name, int $price, int $quantity)
+  {
+    $obj1 = new Product($name, $price, $quantity);
+
+    array_push($this->products, $obj1);
+  }
+
+  public function getProducts()
+  {
+    return $this->products;
+  }
+}
+?>
