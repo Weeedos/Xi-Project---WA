@@ -9,13 +9,17 @@ switch ($request) {
     case '/home':
         $redirect = '/views/index.php';
         break;
-
     case '/cart':
         $redirect = '/views/cart.php';
         break;
-
     case '/products':
         $redirect = '/views/products.php';
+        break;
+    case '/login':
+        $redirect = '/views/login.php';
+        break;
+    case '/logout':
+        $redirect = '/views/logout.php';
         break;
     default:
         http_response_code(404);

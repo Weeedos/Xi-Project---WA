@@ -17,7 +17,7 @@
 <body>
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="index.html">E-Shop</a>
+      <a class="navbar-brand" href="/home">E-Shop</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -28,7 +28,7 @@
             <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/index.php" ? "active" : "" ?>"
               href="/home">Home</a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/products.php" ? "active" : "" ?>"
               href="/products">Products</a>
           </li>
@@ -36,10 +36,16 @@
             <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/cart.php" ? "active" : "" ?>"
               href="/cart">Cart</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/login.php" ? "active" : "" ?>"
-              href="/login">Login</a>
-          </li>
+          <?php if (isset($_SESSION["authenticated"])) { ?>
+            <li class="nav-item">
+              <a class="nav-item nav-link" href="/logout">Logout</a>
+            </li>
+          <?php } else { ?>
+            <li class="nav-item">
+              <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/login.php" ? "active" : "" ?>"
+                href="/login">Login</a>
+            </li>
+          <?php } ?>
         </ul>
       </div>
     </nav>
@@ -47,36 +53,36 @@
   </header>
 
   <main class="container mt-4">
-    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+    <form method="post" action="/cart">
       <h1>Product Catalog</h1>
       <div class="row">
         <div class="col-md-4 mb-4">
           <div class="card">
-            <img src="product1.jpg" class="card-img-top" alt="Product 1">
+            <img src="https://picsum.photos/200/300" class="card-img-top" alt="Product 1">
             <div class="card-body">
               <h5 class="card-title">Product 1</h5>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              <input type="submit1" class="btn btn-primary" value="Add to Cart"></a>
+              <button type="submit" name="product_id" value="1" class="btn btn-primary">Add to Cart</button>
             </div>
           </div>
         </div>
         <div class="col-md-4 mb-4">
           <div class="card">
-            <img src="product2.jpg" class="card-img-top" alt="Product 2">
+            <img src="https://picsum.photos/200/300" class="card-img-top" alt="Product 2">
             <div class="card-body">
               <h5 class="card-title">Product 2</h5>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              <input type="submit2" class="btn btn-primary" value="Add to Cart"></a>
+              <button type="submit" name="product_id" value="2" class="btn btn-primary">Add to Cart</button>
             </div>
           </div>
         </div>
         <div class="col-md-4 mb-4">
           <div class="card">
-            <img src="product3.jpg" class="card-img-top" alt="Product 3">
+            <img src="https://picsum.photos/200/300" class="card-img-top" alt="Product 3">
             <div class="card-body">
               <h5 class="card-title">Product 3</h5>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              <input type="submit3" class="btn btn-primary" value="Add to Cart"></a>
+              <button type="submit" name="product_id" value="3" class="btn btn-primary">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -84,7 +90,7 @@
     </form>
   </main>
 
-  <footer class="mt-4 text-center fixed-bottom">
+  <footer class="mt-4 text-center">
     <p>&copy; 2023 E-Shop. All rights reserved.</p>
   </footer>
 
@@ -104,22 +110,3 @@
 </body>
 
 </html>
-
-<?php
-
-$cart = new Cart();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  if (isset($_POST['submit1'])) {
-    $cart->addProduct("Product 1", 1000, 1);
-  }
-  if (isset($_POST['submit2'])) {
-    $cart->addProduct("Product 2", 2000, 1);
-  }
-  if (isset($_POST['submit3'])) {
-    $cart->addProduct("Product 3", 3000, 1);
-  }
-  #echo $cart->getProducts();
-}
-
-?>

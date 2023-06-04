@@ -18,14 +18,14 @@
 <body>
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="index.html">E-Shop</a>
+      <a class="navbar-brand" href="/home">E-Shop</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/index.php" ? "active" : "" ?>"
               href="/home">Home</a>
           </li>
@@ -37,10 +37,16 @@
             <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/cart.php" ? "active" : "" ?>"
               href="/cart">Cart</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/login.php" ? "active" : "" ?>"
-              href="/login">Login</a>
-          </li>
+          <?php if (isset($_SESSION["authenticated"])) { ?>
+            <li class="nav-item">
+              <a class="nav-item nav-link" href="/logout">Logout</a>
+            </li>
+          <?php } else { ?>
+            <li class="nav-item">
+              <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/login.php" ? "active" : "" ?>"
+                href="/login">Login</a>
+            </li>
+          <?php } ?>
         </ul>
       </div>
     </nav>
@@ -80,7 +86,7 @@
       tempora!</p>
   </main>
 
-  <footer class="mt-4 text-center fixed-bottom">
+  <footer class="mt-4 text-center">
     <p>&copy; 2023 E-Shop. All rights reserved.</p>
   </footer>
 
