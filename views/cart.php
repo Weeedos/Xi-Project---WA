@@ -18,6 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product_id']))
   }
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
+  $_SESSION['cart'] = array();
+  $checkoutMessage = "Thanks for shopping with us!";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -63,6 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product_id']))
   </header>
 
   <main class="container mt-4">
+
+    <?php if (isset($checkoutMessage)): ?>
+      <div class="alert alert-success">
+        <?php echo $checkoutMessage; ?>
+      </div>
+    <?php endif; ?>
+
     <h1>Shopping Cart</h1>
     <table class="table">
       <thead>
@@ -143,9 +155,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product_id']))
       echo $total . 'Kc';
       ?>
     </div>
-    <div class="text-center">
-      <a href="#" class="btn btn-primary">Checkout</a>
-    </div>
+    <form method="post" action="">
+      <div class="text-center">
+        <button type="submit" name="checkout" value="checkout" class="btn btn-primary">Checkout</button>
+      </div>
+    </form>
   </main>
 
   <footer class="mt-4 text-center">

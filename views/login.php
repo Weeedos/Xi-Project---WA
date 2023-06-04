@@ -1,3 +1,36 @@
+<?php
+
+if (isset($_POST['login'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $host = 'localhost';
+    $dbname = 'shop';
+    $username_db = 'root';
+    $password_db = '';
+
+    try {
+        $conn = new PDO("mysql:host=$host;dbname=$dbname", $username_db, $password_db);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $stmt = $conn->prepare("SELECT * FROM user WHERE username = :username AND password = :password");
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':password', $password);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['username'] = $username;
+            $_SESSION['authenticated'] = true;
+            $successMessage = "You are logged in";
+        } else {
+            $errorMessage = "Invalid username or password";
+        }
+    } catch (PDOException $e) {
+        echo "Connection failed: " . $e->getMessage();
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,17 +80,27 @@
     </header>
 
     <div class="container mt-4">
-        <form>
+        <?php if (isset($errorMessage)): ?>
+            <div class="alert alert-danger">
+                <?php echo $errorMessage; ?>
+            </div>
+        <?php endif; ?>
+        <?php if (isset($successMessage)): ?>
+            <div class="alert alert-success">
+                <?php echo $successMessage; ?>
+            </div>
+        <?php endif; ?>
+        <form method="post" action="">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter username">
+                <input type="text" class="form-control" name="username" placeholder="Enter username">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter password">
+                <input type="password" class="form-control" name="password" placeholder="Enter password">
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-            <a href="/register" class="btn btn-link">Register</a>
+            <button type="submit" class="btn btn-primary" name="login" value="login">Login</button>
+            <button type="submit" class="btn btn-secondary" name="register" value="register">Register</button>
         </form>
     </div>
 
