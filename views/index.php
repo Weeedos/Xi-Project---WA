@@ -18,14 +18,14 @@
 <body>
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="index.html">E-Shop</a>
+      <a class="navbar-brand" href="/home">E-Shop</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/index.php" ? "active" : "" ?>"
               href="/home">Home</a>
           </li>
@@ -80,7 +80,7 @@
       tempora!</p>
   </main>
 
-  <footer class="mt-4 text-center fixed-bottom">
+  <footer class="mt-4 text-center">
     <p>&copy; 2023 E-Shop. All rights reserved.</p>
   </footer>
 
