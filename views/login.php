@@ -1,34 +1,63 @@
 <?php
 
-if (isset($_POST['login'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+error_reporting(E_ERROR | E_PARSE);
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: /home");
+    exit;
+}
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
 
     $host = 'localhost';
     $dbname = 'shop';
     $username_db = 'root';
     $password_db = '';
 
-    try {
-        $conn = new PDO("mysql:host=$host;dbname=$dbname", $username_db, $password_db);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $stmt = $conn->prepare("SELECT * FROM user WHERE username = :username AND password = :password");
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':password', $password);
-        $stmt->execute();
+    if (isset($_POST["login"])) {
+        try {
+            if (isset($_POST["login"])) {
+                $conn = new PDO("mysql:host=$host;dbname=$dbname", $username_db, $password_db);
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $stmt = $conn->prepare("SELECT * FROM user WHERE username = :username AND password = :password");
+                $stmt->bindParam(':username', $username);
+                $stmt->bindParam(':password', $password);
+                $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
-            $_SESSION['username'] = $username;
-            $_SESSION['authenticated'] = true;
-            $successMessage = "You are logged in";
-        } else {
-            $errorMessage = "Invalid username or password";
+                if ($stmt->rowCount() > 0) {
+                    $_SESSION['username'] = $username;
+                    $_SESSION['authenticated'] = true;
+                    $successMessage = "You are logged in";
+                } else {
+                    $errorMessage = "Invalid username or password";
+                }
+            }
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
         }
-    } catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
+    } elseif (isset($_POST["register"])) {
+        try {
+            if ($_SESSION["username"] === "" || $_SESSION["username"] === " " || $_SESSION["password"] === "" || $_SESSION["password"] === " ") {
+                $errorMessage = "Registration failed";
+            } else {
+                $conn = new PDO("mysql:host=$host;dbname=$dbname", $username_db, $password_db);
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $stmt = $conn->prepare("INSERT INTO user (username, password) VALUES (:username, :password)");
+                $stmt->bindParam(':username', $username);
+                $stmt->bindParam(':password', $password);
+                $stmt->execute();
+
+                $successMessage = "Registration successful";
+            }
+
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+        }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -70,10 +99,16 @@ if (isset($_POST['login'])) {
                         <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/cart.php" ? "active" : "" ?>"
                             href="/cart">Cart</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/login.php" ? "active" : "" ?>"
-                            href="/login">Login</a>
-                    </li>
+                    <?php if (isset($_SESSION["authenticated"])) { ?>
+                        <li class="nav-item">
+                            <a class="nav-item nav-link" href="/logout">Logout</a>
+                        </li>
+                    <?php } else { ?>
+                        <li class="nav-item">
+                            <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/login.php" ? "active" : "" ?>"
+                                href="/login">Login</a>
+                        </li>
+                    <?php } ?>
                 </ul>
             </div>
         </nav>

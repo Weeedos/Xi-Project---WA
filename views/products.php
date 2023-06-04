@@ -36,10 +36,16 @@
             <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/cart.php" ? "active" : "" ?>"
               href="/cart">Cart</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/login.php" ? "active" : "" ?>"
-              href="/login">Login</a>
-          </li>
+          <?php if (isset($_SESSION["authenticated"])) { ?>
+            <li class="nav-item">
+              <a class="nav-item nav-link" href="/logout">Logout</a>
+            </li>
+          <?php } else { ?>
+            <li class="nav-item">
+              <a class="nav-item nav-link <?= $_SESSION["site"] === "/views/login.php" ? "active" : "" ?>"
+                href="/login">Login</a>
+            </li>
+          <?php } ?>
         </ul>
       </div>
     </nav>
